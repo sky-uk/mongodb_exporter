@@ -1,6 +1,7 @@
 package collector
 
 import (
+	"fmt"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -28,7 +29,7 @@ var (
 		Namespace: Namespace,
 		Subsystem: Subsystem,
 		Name:      "number_of_members",
-		Help:      "The number of replica set mebers",
+		Help:      "The number of replica set members",
 	}, []string{"set"})
 	heartbeatIntervalMillis = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: Namespace,
@@ -47,7 +48,7 @@ var (
 		Subsystem: Subsystem,
 		Name:      "member_state",
 		Help:      "The value of state is an integer between 0 and 10 that represents the replica state of the member.",
-	}, []string{"set", "name", "state"})
+	}, []string{"set", "name"})
 	memberUptime = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Namespace: Namespace,
 		Subsystem: Subsystem,
@@ -150,7 +151,15 @@ func (replStatus *ReplSetStatus) Export(ch chan<- prometheus.Metric) {
 			"state": member.StateStr,
 		}
 
-		memberState.With(ls).Set(float64(member.State))
+		labelsOhneState := prometheus.Labels{
+			"set":  replStatus.Set,
+			"name": member.Name,
+		}
+		fmt.Printf("Printing a loglog")
+
+		glog.Errorf("Labels without state: %s", labelsOhneState)
+
+		memberState.With(labelsOhneState).Set(float64(member.State))
 
 		// ReplSetStatus.Member.Health is not available on the node you're connected to
 		if member.Health != nil {

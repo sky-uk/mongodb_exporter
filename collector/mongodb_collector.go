@@ -1,9 +1,9 @@
 package collector
 
 import (
-	"github.com/dcu/mongodb_exporter/shared"
 	"github.com/golang/glog"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/sky-uk/mongodb_exporter/shared"
 	"gopkg.in/mgo.v2"
 )
 

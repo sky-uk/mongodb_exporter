@@ -3,8 +3,8 @@ package collector
 import (
 	"testing"
 
-	"github.com/dcu/mongodb_exporter/shared"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/sky-uk/mongodb_exporter/shared"
 )
 
 func Test_CollectServerStatus(t *testing.T) {
